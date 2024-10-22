@@ -53,6 +53,11 @@ resource "aws_iam_role_policy_attachment" "attach_policy" {
   role       = aws_iam_role.ec2_role.name
 }
 
+resource "aws_iam_instance_profile" "ec2_instance_profile" {
+  name = "ec2_instance_profile"
+  role = aws_iam_role.ec2_role.name
+}
+
 resource "aws_s3_object" "folder1" {
   bucket = aws_s3_bucket.oneton_bucket.id
   key    = "folder1/"
@@ -80,6 +85,7 @@ resource "aws_s3_object" "textfile2_in_folder2" {
   content = "This is file2 in folder2"
   content_type = "text/plain"
 }
+
 
 resource "aws_instance" "ec2_instance" {
   ami                    = var.ami_id
@@ -145,11 +151,6 @@ EOF
   tags = {
     Name = var.instance_name
   }
-}
-
-resource "aws_iam_instance_profile" "ec2_instance_profile" {
-  name = "ec2_instance_profile"
-  role = aws_iam_role.ec2_role.name
 }
 
 resource "aws_security_group" "TF_SG" {
